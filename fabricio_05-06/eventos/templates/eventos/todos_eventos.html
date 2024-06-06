@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos os Eventos</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn-delete:hover {
+            background-color: #da190b;
+        }
+
+        .btn-cadastrar {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn-cadastrar:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Todos os Eventos</h1>
+    <button class="btn-cadastrar" onclick="location.href='/eventos/criar/'">Cadastrar Evento</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Ações</th>
+                <!-- Adicione aqui outros cabeçalhos da tabela -->
+            </tr>
+        </thead>
+        <tbody id="eventos-table-body">
+            {% for evento in eventos %}
+                <tr id="evento-{{ evento.id }}">
+                    <td>{{ evento.titulo }}</td>
+                    <!-- Adicione aqui outras colunas da tabela com os detalhes do evento -->
+                    <td>
+                        <button type="button" class="btn-delete" onclick="deleteEvento({{ evento.id }})">Excluir</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function deleteEvento(eventoId) {
+            if (confirm("Tem certeza de que deseja excluir este evento?")) {
+                fetch(`/eventos/${eventoId}/excluir/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById(`evento-${eventoId}`).remove();
+                    } else {
+                        alert('Erro ao excluir o evento.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao excluir o evento.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

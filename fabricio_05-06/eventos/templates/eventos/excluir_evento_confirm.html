@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir Evento</title>
+</head>
+<body>
+    <h1>Você tem certeza que deseja excluir este evento?</h1>
+    <p>Título: {{ evento.titulo }}</p>
+    <p>Descrição: {{ evento.descricao }}</p>
+    <p>Data de Início: {{ evento.data_inicio }}</p>
+    <p>Data de Término: {{ evento.data_termino }}</p>
+    <p>Local: {{ evento.local }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmar Exclusão</button>
+    </form>
+</body>
+</html>
